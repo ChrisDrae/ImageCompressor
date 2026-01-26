@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("imageCompressor")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+427f0477512644f58d770944471b49e9548372fb")]
 [assembly: System.Reflection.AssemblyProductAttribute("imageCompressor")]
 [assembly: System.Reflection.AssemblyTitleAttribute("imageCompressor")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
