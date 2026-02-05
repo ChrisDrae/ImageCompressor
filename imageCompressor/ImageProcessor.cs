@@ -6,7 +6,7 @@ using SixLabors.ImageSharp.PixelFormats;
 
 namespace imageCompressor
 {
-    public class ImageReader
+    public class ImageProcessor
     {
         public static float[,] ConvertImage(string path)
         {

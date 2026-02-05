@@ -12,9 +12,9 @@ if (string.IsNullOrWhiteSpace(path) || !File.Exists(path))
     return;
 }
 
-float[,] local_matrix = ImageReader.ConvertImage(path);
+float[,] local_matrix = ImageProcessor.ConvertImage(path);
 
 var length = local_matrix.GetLength(0);
 var width = local_matrix.GetLength(1);
 
-ImageReader.BuildGreyImageFromMatrix(local_matrix);
+ImageProcessor.BuildGreyImageFromMatrix(local_matrix);
