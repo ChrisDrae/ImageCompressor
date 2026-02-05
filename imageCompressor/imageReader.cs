@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Security.Cryptography.X509Certificates;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Advanced;
@@ -30,23 +31,27 @@ namespace imageCompressor
             return matrix;
         }
 
-        // public static Image<Rgba32> BuildImageFromMatrix(float[,] matrix)
-        // {
-        //     var height = matrix.GetLength(0);
-        //     var width = matrix.GetLength(1);
+        public static void BuildGreyImageFromMatrix(float[,] matrix)
+        {
+            var width = matrix.GetLength(1);
+            var height = matrix.GetLength(0);
 
-        //     var image = new Image<Rgba32>(width, height);
+            byte[] rawPixelData = new byte[height * width];
 
-        //     for (int y = 0; y < height; y++)
-        //     {
-        //         Span<Rgba32> row = image.DangerousGetPixelRowMemory(y).Span;
+            var i = 0;
+            for(int y = 0; y < width; y++)
+            {
+                for(int x=0; x < height; x++)
+                {   
+                    float grayValue = matrix[x,y];
+                    byte grayValueByte = (byte) (grayValue > 256 ? 255 : grayValue < 0 ? 0 : grayValue );    
+                    rawPixelData[i++] = grayValueByte;
+                }
+            }
 
-        //         for (int x = 0; x < width; x++)
-        //         {
-        //             byte intensity = (byte)matrix[y, x];
-        //             row[x] = new L8(intensity).ToRgba32;
-        //         }
-        //     }
-        // }
+            var image = Image.LoadPixelData<L8>(rawPixelData, height, width);
+            image.Save("result.png");
+        }
+        
     }
 }

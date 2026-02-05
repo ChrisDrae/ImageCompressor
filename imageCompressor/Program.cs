@@ -17,10 +17,4 @@ float[,] local_matrix = ImageReader.ConvertImage(path);
 var length = local_matrix.GetLength(0);
 var width = local_matrix.GetLength(1);
 
-for (int i = 0; i < length; i++)
-{
-    for (int j = 0; j < width; j++)
-    {
-        Console.Write(float.Round(local_matrix[i, j]) + ",");
-    }
-}
+ImageReader.BuildGreyImageFromMatrix(local_matrix);
