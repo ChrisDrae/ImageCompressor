@@ -1,5 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Security.Cryptography.X509Certificates;
+using System.IO;
+using System;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Advanced;
 using SixLabors.ImageSharp.PixelFormats;
@@ -39,12 +41,12 @@ namespace imageCompressor
             byte[] rawPixelData = new byte[height * width];
 
             var i = 0;
-            for(int y = 0; y < width; y++)
+            for (int y = 0; y < width; y++)
             {
-                for(int x=0; x < height; x++)
-                {   
-                    float grayValue = matrix[x,y];
-                    byte grayValueByte = (byte) (grayValue > 256 ? 255 : grayValue < 0 ? 0 : grayValue );    
+                for (int x = 0; x < height; x++)
+                {
+                    float grayValue = matrix[x, y];
+                    byte grayValueByte = (byte)(grayValue > 256 ? 255 : grayValue < 0 ? 0 : grayValue);
                     rawPixelData[i++] = grayValueByte;
                 }
             }
@@ -52,6 +54,24 @@ namespace imageCompressor
             var image = Image.LoadPixelData<L8>(rawPixelData, height, width);
             image.Save("result.png");
         }
-        
+
+        public static void MakeText(float[,] matrix)
+        {
+            string filePath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            var width = matrix.GetLength(0);
+            var height = matrix.GetLength(1);
+
+            using StreamWriter outputFile = new(Path.Combine(filePath, "Test.txt"), true);
+            for (int i = 0; i < height; i++)
+            {
+                for (int j = 0; j < width; j++)
+                {
+                    var character = ASCEncoder.ASCIIEncoding(matrix[j, i]);
+                    outputFile.Write(character);
+                }
+                outputFile.Write("\n");
+            }
+
+        }
     }
 }

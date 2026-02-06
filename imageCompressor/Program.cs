@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Numerics;
 using imageCompressor;
 
+ASCEncoder.ASCIIEncoding(222.4324f);
 Console.WriteLine("Enter path to image:");
 string? path = Console.ReadLine();
 
@@ -14,7 +15,6 @@ if (string.IsNullOrWhiteSpace(path) || !File.Exists(path))
 
 float[,] local_matrix = ImageProcessor.ConvertImage(path);
 
-var length = local_matrix.GetLength(0);
-var width = local_matrix.GetLength(1);
+ImageProcessor.MakeText(local_matrix);
 
 ImageProcessor.BuildGreyImageFromMatrix(local_matrix);
