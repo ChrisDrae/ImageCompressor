@@ -5,19 +5,12 @@ using SixLabors.ImageSharp;
 namespace imageCompressor;
 
 public class ASCEncoder {
-    public static char ASCIIEncoding(float input)
+    public static char ASCIIEncoding(float input, string encodingImage)
     {
-        var asciiSpace = "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,\"^`'. ";
-       
-        var spacing = 4;
+        var spacing = 3.6;
         var index = ((int)(input/spacing));
-        return asciiSpace[index];
-    }
-    static string ReverseString(string s)
-    {
-        char[] array = s.ToCharArray();
-        Array.Reverse(array);
-        return new string(array);
-        
+        if( index > 70 ) index -= 2;
+        if( index > 69 ) index--;
+        return encodingImage[index];
     }
 }
