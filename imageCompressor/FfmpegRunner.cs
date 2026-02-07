@@ -21,7 +21,6 @@ public static class FfmpegRunner
         process.Start();
 
         string stderr = process.StandardError.ReadToEnd();
-        string stdout = process.StandardOutput.ReadToEnd();
 
         process.WaitForExit();
 
