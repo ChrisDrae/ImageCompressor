@@ -55,11 +55,11 @@ namespace imageCompressor
             image.Save("result.png");
         }
 
-        public static void MakeText(float[,] matrix)
+        public static void RenderImageToText(float[,] matrix)
         {
             string filePath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            var width = matrix.GetLength(0);
             var height = matrix.GetLength(1);
+            var width = matrix.GetLength(0);
 
             using StreamWriter outputFile = new(Path.Combine(filePath, "Test.txt"), true);
             for (int i = 0; i < height; i++)
@@ -71,7 +71,6 @@ namespace imageCompressor
                 }
                 outputFile.Write("\n");
             }
-
         }
     }
 }
