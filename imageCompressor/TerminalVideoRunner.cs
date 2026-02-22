@@ -6,7 +6,7 @@ namespace imageCompressor;
 
 public static class TerminalVideoRunner
 {
-    const double targetFrameTime = 1000.0 / 60;
+    const double targetFrameTime = 1000.0 / 24;
     public static void RenderTxtToNewTerminal()
     {
         var pathToYourTxtFile = @"c:\Users\erich\Desktop\Test.txt";
@@ -26,7 +26,6 @@ public static class TerminalVideoRunner
 
     public static string SpliceVideo()
     {
-
         var videoPath = Utility.PathValidator("video");
         var videoName = Path.GetFileName(videoPath);
         var frameFolder = $"E:/ProgramAccessStorage/media/frames/{videoName}";

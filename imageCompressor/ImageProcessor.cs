@@ -108,6 +108,7 @@ public class ImageProcessor
             stringBuilder.Append("\r\n");   
         }
         Console.Write(stringBuilder.ToString());
-        Console.Clear(); 
+        stringBuilder.Clear();
+        Console.Write("\u001b[H");
     }
 }

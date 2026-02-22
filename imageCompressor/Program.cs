@@ -11,9 +11,9 @@ string inputVideo = "E:/ProgramAccessStorage/media/video/source.mp4";
 string outputDirectory = "E:/ProgramAccessStorage/media/frames/frame_%06d.png";
 
 //var frameFolder = TerminalVideoRunner.SpliceVideo();
-var frameFolder = "E:/ProgramAccessStorage/media/frames/Tame.mp4/";
-//var folder = "E:/ProgramAccessStorage/media/frames/source.mp4/";
-TerminalVideoRunner.RenderFramesToTerminal(frameFolder);
+//var frameFolder = "E:/ProgramAccessStorage/media/frames/Tame.mp4/";
+var folder = "E:/ProgramAccessStorage/media/frames/source.mp4/";
+TerminalVideoRunner.RenderFramesToTerminal(folder);
 ////   ------------------------- This are just functions representing different stages of the application that I didn't ant to lose -----------------------------------
 
 
