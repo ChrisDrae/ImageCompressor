@@ -1,24 +1,70 @@
 using System.Diagnostics;
 using Microsoft.VisualBasic;
+using imageCompressor;
 
 namespace imageCompressor;
 
 public static class TerminalVideoRunner
 {
-    public static void RenderToTerminal()
-    {   
-        var pathToYourTxtFile =  @"c:\Users\erich\Desktop\Test.txt";
+    const double targetFrameTime = 1000.0 / 60;
+    public static void RenderTxtToNewTerminal()
+    {
+        var pathToYourTxtFile = @"c:\Users\erich\Desktop\Test.txt";
         var process = new Process
         {
-            StartInfo =  new ProcessStartInfo
+            StartInfo = new ProcessStartInfo
             {
-                FileName = "cmd.exe",
-                Arguments = $"/k type \"{pathToYourTxtFile}\"",
+                FileName = "wt.exe",
+                Arguments = $"cmd /k type \"{pathToYourTxtFile}\"",
                 UseShellExecute = true,
-                CreateNoWindow =  false
+                CreateNoWindow = false
             }
         };
 
         process.Start();
+    }
+
+    public static string SpliceVideo()
+    {
+
+        var videoPath = Utility.PathValidator("video");
+        var videoName = Path.GetFileName(videoPath);
+        var frameFolder = $"E:/ProgramAccessStorage/media/frames/{videoName}";
+
+        Directory.CreateDirectory(frameFolder);
+        var framePath = $"{frameFolder}/frame_%06d.png";
+        FfmpegRunner.Run($"-i {videoPath} -vf scale=960:540 {framePath}");
+        return $"{frameFolder}/";
+    }
+
+    public static void RenderFramesToTerminal(string frameDirectory)
+    {
+        var stopwatch = new Stopwatch();
+        var frameIndex = 1;
+        var isRendering = true;
+
+        Console.Write("\u001b[H");
+        while (isRendering)
+        {
+            stopwatch.Restart();
+            Console.Write("\u001b[H");
+            var framePath = $"{frameDirectory}frame_{frameIndex:D6}.png";
+            if (!File.Exists(framePath))
+            {
+                isRendering = false;
+            }
+            else
+            {
+                var frameMatrix = ImageProcessor.ConvertImage(framePath);
+                ImageProcessor.WriteFrameToTerminal(frameMatrix);
+            }
+            frameIndex += 1;
+            stopwatch.Stop();
+            var sleep = targetFrameTime - stopwatch.Elapsed.TotalMilliseconds;
+            
+            if(sleep > 0){
+                Thread.Sleep((int) sleep);
+            }
+        }
     }
 }
