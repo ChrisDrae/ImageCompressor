@@ -14,13 +14,12 @@ Console.WriteLine("Enter path to image:");
 string? path = Console.ReadLine();
 
 if (string.IsNullOrWhiteSpace(path) || !File.Exists(path))
+
+#pragma warning disable CS8321 // Local function is declared but never used
+static void Test()
 {
-    Console.WriteLine("Invalid file path");
-    return;
+    var filePath = Utility.PathValidator("image");
+    float[,] imageMatrix = ImageProcessor.ConvertImage(filePath);
+    ImageProcessor.WriteFrameToTerminal(imageMatrix);
 }
-
-float[,] imageMatrix = ImageProcessor.ConvertImage(path);
-
-ImageProcessor.RenderImageToText(imageMatrix);
-
-ImageProcessor.BuildGreyImageFromMatrix(imageMatrix);
+#pragma warning restore CS8321 // Local function is declared but never used
