@@ -5,6 +5,9 @@ using System;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Advanced;
 using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
+using System.Text;
+using System.Diagnostics;
 
 namespace imageCompressor;
 
@@ -24,6 +27,11 @@ public class ImageProcessor
     public static float[,] ConvertImage(string path)
     {
         using var image = Image.Load<Rgba32>(path);
+        // USE CASE ASCII ART
+        //Resize because character boxes are 1x2 Width/Height//
+        //
+
+        image.Mutate(x => x.Resize(image.Width, image.Height / 2));
 
         int width = image.Width;
         int height = image.Height;
@@ -72,15 +80,34 @@ public class ImageProcessor
         var height = matrix.GetLength(1);
         var width = matrix.GetLength(0);
 
-        using StreamWriter outputFile = new(Path.Combine(filePath, "Test.txt"), true);
-        for (int i = 0; i < height; i++)
+        using StreamWriter outputFile = new(Path.Combine(filePath, "Test.txt"), false);
+        for (int y = 0; y < height; y++)
         {
-            for (int j = 0; j < width; j++)
+            for (int x = 0; x < width; x++)
             {
-                var character = ASCEncoder.ASCIIEncoding(matrix[j, i], ReverseString(ImageProcessor.asciiSpace));
+                var character = ASCEncoder.ASCIIEncoding(matrix[x, y], ReverseString(ImageProcessor.asciiSpace));
                 outputFile.Write(character);
             }
-            outputFile.Write("\n");
+            outputFile.Write("\r\n");
         }
+    }
+
+    public static void WriteFrameToTerminal(float[,] matrix)
+    {   
+        var height = matrix.GetLength(1);
+        var width = matrix.GetLength(0);
+
+        var stringBuilder = new StringBuilder();
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                var character = ASCEncoder.ASCIIEncoding(matrix[x, y], ReverseString(asciiSpace));
+                stringBuilder.Append(character);
+            }
+            stringBuilder.Append("\r\n");   
+        }
+        Console.Write(stringBuilder.ToString());
+        Console.Clear(); 
     }
 }
