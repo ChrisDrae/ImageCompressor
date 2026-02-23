@@ -1,13 +1,8 @@
-using System.ComponentModel.DataAnnotations;
-using System.Security.Cryptography.X509Certificates;
-using System.IO;
-using System;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Advanced;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using System.Text;
-using System.Diagnostics;
 
 namespace imageCompressor;
 
@@ -15,13 +10,13 @@ namespace imageCompressor;
 public class ImageProcessor
 {
     public static readonly string asciiSpace = "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,\"^`'. ";
+    public static readonly string reversedAscii = ReverseString(asciiSpace);
 
     public static string ReverseString(string s)
     {
         char[] array = s.ToCharArray();
         Array.Reverse(array);
         return new string(array);
-
     }
 
     public static float[,] ConvertImage(string path)
@@ -85,7 +80,7 @@ public class ImageProcessor
         {
             for (int x = 0; x < width; x++)
             {
-                var character = ASCEncoder.ASCIIEncoding(matrix[x, y], ReverseString(ImageProcessor.asciiSpace));
+                var character = ASCEncoder.ASCIIEncoding(matrix[x, y], reversedAscii);
                 outputFile.Write(character);
             }
             outputFile.Write("\r\n");
@@ -102,7 +97,7 @@ public class ImageProcessor
         {
             for (int x = 0; x < width; x++)
             {
-                var character = ASCEncoder.ASCIIEncoding(matrix[x, y], ReverseString(asciiSpace));
+                var character = ASCEncoder.ASCIIEncoding(matrix[x, y], reversedAscii);
                 stringBuilder.Append(character);
             }
             stringBuilder.Append("\r\n");   
