@@ -10,6 +10,7 @@ Debug/
 Release/
 [Bb]uild/
 out/
+frames/
 
 # --- .NET Generated Files ---
 *.dll
