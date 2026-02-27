@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using Microsoft.VisualBasic;
 using imageCompressor;
 
 namespace imageCompressor;
@@ -7,6 +6,7 @@ namespace imageCompressor;
 public static class TerminalVideoRunner
 {
     const double targetFrameTime = 1000.0 / 24;
+
     public static void RenderTxtToNewTerminal()
     {
         var pathToYourTxtFile = @"c:\Users\erich\Desktop\Test.txt";
@@ -17,18 +17,18 @@ public static class TerminalVideoRunner
                 FileName = "wt.exe",
                 Arguments = $"cmd /k type \"{pathToYourTxtFile}\"",
                 UseShellExecute = true,
-                CreateNoWindow = false
-            }
+                CreateNoWindow = false,
+            },
         };
 
         process.Start();
     }
 
-    public static string SpliceVideo()
+    public static string SpliceVideo(string path)
     {
         var videoPath = Utility.PathValidator("video");
         var videoName = Path.GetFileName(videoPath);
-        var frameFolder = $"E:/ProgramAccessStorage/media/frames/{videoName}";
+        var frameFolder = $"{path}/{videoName}";
 
         Directory.CreateDirectory(frameFolder);
         var framePath = $"{frameFolder}/frame_%06d.png";
@@ -60,9 +60,10 @@ public static class TerminalVideoRunner
             frameIndex += 1;
             stopwatch.Stop();
             var sleep = targetFrameTime - stopwatch.Elapsed.TotalMilliseconds;
-            
-            if(sleep > 0){
-                Thread.Sleep((int) sleep);
+
+            if (sleep > 0)
+            {
+                Thread.Sleep((int)sleep);
             }
         }
     }

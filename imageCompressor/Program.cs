@@ -10,14 +10,14 @@ using SixLabors.ImageSharp;
 string inputVideo = "E:/ProgramAccessStorage/media/video/source.mp4";
 string outputDirectory = "E:/ProgramAccessStorage/media/frames/frame_%06d.png";
 
-//var frameFolder = TerminalVideoRunner.SpliceVideo();
-//var frameFolder = "E:/ProgramAccessStorage/media/frames/Tame.mp4/";
-var folder = "E:/ProgramAccessStorage/media/frames/source.mp4/";
-TerminalVideoRunner.RenderFramesToTerminal(folder);
+string currentDirectory = Directory.GetCurrentDirectory();
+string frameDirectory = $"{currentDirectory}/frames";
+Directory.CreateDirectory(frameDirectory);
+
+var frameFolder = TerminalVideoRunner.SpliceVideo(frameDirectory);
+
+TerminalVideoRunner.RenderFramesToTerminal(frameFolder);
 ////   ------------------------- This are just functions representing different stages of the application that I didn't ant to lose -----------------------------------
-
-
-
 
 #pragma warning disable CS8321 // Local function is declared but never used
 static void Test()
