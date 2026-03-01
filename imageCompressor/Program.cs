@@ -1,14 +1,6 @@
-﻿// See https://aka.ms/new-console-template for more informatin
-using System.ComponentModel.DataAnnotations;
-using System.Diagnostics;
-using System.Net;
-using System.Numerics;
-using System.Runtime.Versioning;
-using imageCompressor;
+﻿using imageCompressor;
 using SixLabors.ImageSharp;
-
-string inputVideo = "E:/ProgramAccessStorage/media/video/source.mp4";
-string outputDirectory = "E:/ProgramAccessStorage/media/frames/frame_%06d.png";
+using SixLabors.ImageSharp.PixelFormats;
 
 string currentDirectory = Directory.GetCurrentDirectory();
 string frameDirectory = $"{currentDirectory}/frames";
