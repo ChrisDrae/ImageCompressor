@@ -5,12 +5,11 @@ using SixLabors.ImageSharp;
 namespace imageCompressor;
 
 public class ASCEncoder {
-    public static char ASCIIEncoding(float input, string encodingImage)
+    public static char ASCIIEncoding(float greyvalue, string encodingImage)
     {
         var spacing = 3.6;
-        var index = ((int)(input/spacing));
-        if( index > 70 ) index -= 2;
-        if( index > 69 ) index--;
-        return encodingImage[index];
+        var index = greyvalue/spacing;
+        if(index > 69 ) index = 69;
+        return encodingImage[(int)index];
     }
 }
