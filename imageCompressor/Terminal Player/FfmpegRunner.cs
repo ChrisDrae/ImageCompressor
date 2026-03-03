@@ -26,4 +26,15 @@ public static class FfmpegRunner
 
         Console.WriteLine(stderr);
     }
+    public static string SpliceVideo(string path, string aspectRatio)
+    {
+        var videoPath = Utility.PathValidator("video");
+        var videoName = Path.GetFileName(videoPath);
+        var frameFolder = $"{path}/{videoName}";
+
+        Directory.CreateDirectory(frameFolder);
+        var framePath = $"{frameFolder}/frame_%06d.png";
+        Run($"-i {videoPath} -vf scale={aspectRatio} {framePath}");
+        return $"{frameFolder}/";
+    }
 }

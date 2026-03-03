@@ -25,19 +25,7 @@ public static class TerminalVideoRunner
         process.Start();
     }
 
-    public static string SpliceVideo(string path)
-    {
-        var videoPath = Utility.PathValidator("video");
-        var videoName = Path.GetFileName(videoPath);
-        var frameFolder = $"{path}/{videoName}";
-
-        Directory.CreateDirectory(frameFolder);
-        var framePath = $"{frameFolder}/frame_%06d.png";
-        FfmpegRunner.Run($"-i {videoPath} -vf scale=500:400 {framePath}");
-        return $"{frameFolder}/";
-    }
-
-    public static void RenderFramesToTerminal(string frameDirectory)
+    public static void RenderFramesToTerminal(string frameDirectory, Boolean isColored)
     {
         var stopwatch = new Stopwatch();
         var frameIndex = 1;
@@ -54,8 +42,16 @@ public static class TerminalVideoRunner
             }
             else
             {
-                var frameMatrix = ImageProcessor.ConvertImage(framePath);
-                ImageProcessor.WriteFrameToTerminal(frameMatrix);
+                if (isColored)
+                {
+                    var frameMatrix = ImageProcessor.ConvertImageToRGBMatrix(framePath);
+                    ImageProcessor.WriteColoredFrameToTerminal(frameMatrix);
+                }
+                else
+                {
+                    var frameMatrix = ImageProcessor.ConvertImageToGreyMatrix(framePath);
+                    ImageProcessor.WriteFrameToTerminal(frameMatrix);
+                }
             }
             frameIndex += 1;
             stopwatch.Stop();

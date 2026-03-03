@@ -19,7 +19,7 @@ public class ImageProcessor
         return new string(array);
     }
 
-    public static float[,] ConvertImage(string path)
+    public static float[,] ConvertImageToGreyMatrix(string path)
     {
         using var image = Image.Load<Rgba32>(path);
         // USE CASE ASCII ART
@@ -40,8 +40,35 @@ public class ImageProcessor
             for (int j = 0; j < width; j++)
             {
                 Rgba32 pixel = row[j];
-                float gray = 0.299f * pixel.R + 0.587f * pixel.G + 0.114f * pixel.B;
+                float gray = Utility.PixelToGrey(pixel);
                 matrix[j, i] = gray;
+            }
+        }
+        return matrix;
+    }
+
+    public static Rgba32[,] ConvertImageToRGBMatrix(string path)
+    {
+        using var image = Image.Load<Rgba32>(path);
+        // USE CASE ASCII ART
+        //Resize because character boxes are 1x2 Width/Height//
+        //
+
+        image.Mutate(x => x.Resize(image.Width, image.Height / 2));
+
+        int width = image.Width;
+        int height = image.Height;
+
+        var matrix = new Rgba32[width, height];
+
+        for (int i = 0; i < height; i++)
+        {
+            Span<Rgba32> row = image.DangerousGetPixelRowMemory(i).Span;
+
+            for (int j = 0; j < width; j++)
+            {
+                Rgba32 pixel = row[j];
+                matrix[j, i] = pixel;
             }
         }
         return matrix;
@@ -99,6 +126,29 @@ public class ImageProcessor
             {
                 var character = ASCEncoder.ASCIIEncoding(matrix[x, y], reversedAscii);
                 stringBuilder.Append(character);
+            }
+            stringBuilder.Append("\r\n");   
+        }
+        Console.Write(stringBuilder.ToString());
+        stringBuilder.Clear();
+        Console.Write("\u001b[H");
+    }
+
+    public static void WriteColoredFrameToTerminal(Rgba32[,] matrix)
+    {   
+        var height = matrix.GetLength(1);
+        var width = matrix.GetLength(0);
+
+        var stringBuilder = new StringBuilder();
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                var pixel = matrix[x, y];
+                var characterGreyValue = Utility.PixelToGrey(pixel);
+                var character = ASCEncoder.ASCIIEncoding(characterGreyValue, reversedAscii);
+                var ansiColoredCall = Ansi.GetAnsiColorCommand(pixel, character);
+                stringBuilder.Append(ansiColoredCall);
             }
             stringBuilder.Append("\r\n");   
         }
