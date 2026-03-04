@@ -4,8 +4,8 @@ using imageCompressor;
 namespace imageCompressor;
 
 public static class TerminalVideoRunner
-{   
-    const double fps = 12.5;
+{
+    const double fps = 24;
     const double targetFrameTime = 1000.0 / fps;
 
     public static void RenderTxtToNewTerminal()

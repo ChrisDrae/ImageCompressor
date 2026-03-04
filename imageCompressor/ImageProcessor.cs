@@ -1,15 +1,15 @@
+using System.Text;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Advanced;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
-using System.Text;
 
 namespace imageCompressor;
 
-
 public class ImageProcessor
 {
-    public static readonly string asciiSpace = "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,\"^`'. ";
+    public static readonly string asciiSpace =
+        "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,\"^`'. ";
     public static readonly string reversedAscii = ReverseString(asciiSpace);
 
     public static string ReverseString(string s)
@@ -53,8 +53,14 @@ public class ImageProcessor
         // USE CASE ASCII ART
         //Resize because character boxes are 1x2 Width/Height//
         //
+        int cols = Console.WindowWidth;
+        int rows = Console.WindowHeight;
+        float charAspectRatio = 0.5f;
 
-        image.Mutate(x => x.Resize(image.Width, image.Height / 2));
+        int targetWidth = cols;
+        int targetHeight = (int)(charAspectRatio * rows);
+
+        image.Mutate(x => x.Resize(targetWidth, rows));
 
         int width = image.Width;
         int height = image.Height;
@@ -87,7 +93,11 @@ public class ImageProcessor
             for (int x = 0; x < height; x++)
             {
                 float grayValue = matrix[x, y];
-                byte grayValueByte = (byte)(grayValue > 256 ? 255 : grayValue < 0 ? 0 : grayValue);
+                byte grayValueByte = (byte)(
+                    grayValue > 256 ? 255
+                    : grayValue < 0 ? 0
+                    : grayValue
+                );
                 rawPixelData[i++] = grayValueByte;
             }
         }
@@ -115,7 +125,7 @@ public class ImageProcessor
     }
 
     public static void WriteFrameToTerminal(float[,] matrix)
-    {   
+    {
         var height = matrix.GetLength(1);
         var width = matrix.GetLength(0);
 
@@ -127,7 +137,7 @@ public class ImageProcessor
                 var character = ASCEncoder.ASCIIEncoding(matrix[x, y], reversedAscii);
                 stringBuilder.Append(character);
             }
-            stringBuilder.Append("\r\n");   
+            stringBuilder.Append("\r\n");
         }
         Console.Write(stringBuilder.ToString());
         stringBuilder.Clear();
@@ -135,7 +145,7 @@ public class ImageProcessor
     }
 
     public static void WriteColoredFrameToTerminal(Rgba32[,] matrix)
-    {   
+    {
         var height = matrix.GetLength(1);
         var width = matrix.GetLength(0);
 
@@ -150,7 +160,7 @@ public class ImageProcessor
                 var ansiColoredCall = Ansi.GetAnsiColorCommand(pixel, character);
                 stringBuilder.Append(ansiColoredCall);
             }
-            stringBuilder.Append("\r\n");   
+            stringBuilder.Append("\r\n");
         }
         Console.Write(stringBuilder.ToString());
         stringBuilder.Clear();
