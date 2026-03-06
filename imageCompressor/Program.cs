@@ -1,8 +1,8 @@
 ﻿using imageCompressor;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
- 
-string aspectRatio = "200:100";
+
+string aspectRatio = "160:90";
 string currentDirectory = Directory.GetCurrentDirectory();
 string frameDirectory = $"{currentDirectory}/frames";
 Directory.CreateDirectory(frameDirectory);

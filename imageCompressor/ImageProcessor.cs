@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Text;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Advanced;
@@ -144,7 +145,7 @@ public class ImageProcessor
         Console.Write("\u001b[H");
     }
 
-    public static void WriteColoredFrameToTerminal(Rgba32[,] matrix)
+    public static void WriteColoredFrameToTerminal(Rgba32[,] matrix, int frameIndex)
     {
         var height = matrix.GetLength(1);
         var width = matrix.GetLength(0);
@@ -162,6 +163,7 @@ public class ImageProcessor
             }
             stringBuilder.Append("\r\n");
         }
+
         Console.Write(stringBuilder.ToString());
         stringBuilder.Clear();
         Console.Write("\u001b[H");
