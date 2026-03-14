@@ -30,25 +30,17 @@ public static class Utility
         return 0.299f * pixel.R + 0.587f * pixel.G + 0.114f * pixel.B;
     }
 
-    public static void Logger(string? log, bool start)
-    {
-        var loggerWatch = new Stopwatch();
+    public static Stopwatch StartTimer() => Stopwatch.StartNew();
 
-        if (start)
-        {
-            loggerWatch.Restart();
-        }
-        else
-        {
-            loggerWatch.Stop();
-            string docPath = Environment.CurrentDirectory;
-            using StreamWriter outputFile = new(
-                Path.Combine(docPath, "PerformanceLog.txt"),
-                append: true
-            );
-            string performanceReport =
-                $"Frame {log} took {loggerWatch.Elapsed.TotalMilliseconds} to be written to the terminal.";
-            outputFile.WriteLine(performanceReport + "\n");
-        }
+    public static void Logger(Stopwatch sw, string? log)
+    {
+        sw.Stop();
+        string docPath = Environment.CurrentDirectory;
+        using StreamWriter outputFile = new(
+            Path.Combine(docPath, "PerformanceLog.txt"),
+            append: true
+        );
+        string performanceReport = $"{log} took {sw.Elapsed.TotalMilliseconds}.";
+        outputFile.WriteLine(performanceReport + "\n");
     }
 }
