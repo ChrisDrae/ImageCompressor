@@ -1,5 +1,6 @@
 using Microsoft.VisualBasic;
 using SixLabors.ImageSharp.PixelFormats;
+
 namespace imageCompressor
 {
     //Console.WriteLine("\u001b[38;2;255;0;0mA\u001b[39mB");
@@ -14,7 +15,7 @@ namespace imageCompressor
         public static string DisableMouseTracking => Csi + "?1000;1006;1003l";
         public static string EnableMouseTracking => Csi + "?1000;1006;1003h";
 
-        public static string GetAnsiColorCommand(Rgba32 pixel, char character)
+        public static string GetAnsiColorCommand(Rgba32 pixel, string character)
         {
             return $"{Csi}38;2;{pixel.R};{pixel.G};{pixel.B}m{character}{Csi}39m";
         }
