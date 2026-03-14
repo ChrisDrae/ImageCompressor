@@ -157,14 +157,31 @@ public class ImageProcessor
             {
                 var pixel = matrix[x, y];
                 var characterGreyValue = Utility.PixelToGrey(pixel);
-                var character = ASCEncoder.ASCIIEncoding(characterGreyValue, reversedAscii);
-                var ansiColoredCall = Ansi.GetAnsiColorCommand(pixel, character);
+                var characterGroup = ASCEncoder.ASCIIEncoding(characterGreyValue, reversedAscii);
+                //Group Characters of similar Color
+                if (x < (width - 1))
+                {
+                    var iterator = 1;
+                    while (pixel.Rgb.GetHashCode == matrix[x + iterator, y].Rgb.GetHashCode)
+                    {
+                        if (x >= (width - iterator))
+                            break;
+                        var nextCharacter = ASCEncoder.ASCIIEncoding(
+                            Utility.PixelToGrey(matrix[x + iterator, y]),
+                            reversedAscii
+                        );
+                        characterGroup += nextCharacter;
+                        iterator++;
+                    }
+                }
+                var ansiColoredCall = Ansi.GetAnsiColorCommand(pixel, characterGroup);
                 stringBuilder.Append(ansiColoredCall);
             }
             stringBuilder.Append("\r\n");
         }
+        var temp = stringBuilder.ToString();
 
-        Console.Write(stringBuilder.ToString());
+        Console.Write(temp);
         stringBuilder.Clear();
         Console.Write("\u001b[H");
     }
