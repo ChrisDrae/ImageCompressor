@@ -2,7 +2,9 @@
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
-string aspectRatio = "160:90";
+AppDomain.CurrentDomain.ProcessExit += OnProcessExit;
+Console.CancelKeyPress += OnCancelKeyPress;
+string aspectRatio = "320:180";
 string currentDirectory = Directory.GetCurrentDirectory();
 string frameDirectory = $"{currentDirectory}/frames";
 Directory.CreateDirectory(frameDirectory);
@@ -10,13 +12,18 @@ Directory.CreateDirectory(frameDirectory);
 var frameFolder = FfmpegRunner.SpliceVideo(frameDirectory, aspectRatio);
 
 TerminalVideoRunner.RenderFramesToTerminal(frameFolder, true);
-////   ------------------------- This are just functions representing different stages of the application that I didn't ant to lose -----------------------------------
 
-#pragma warning disable CS8321 // Local function is declared but never used
-static void Test()
+static void OnProcessExit(object? sender, EventArgs e)
 {
-    var filePath = Utility.PathValidator("image");
-    float[,] imageMatrix = ImageProcessor.ConvertImageToGreyMatrix(filePath);
-    ImageProcessor.WriteFrameToTerminal(imageMatrix);
+    Console.WriteLine("Program is exiting — running cleanup pipeline...");
+    Console.Write(Ansi.EnableMouseTracking);
+    Console.Write(Ansi.ShowCursor);
 }
-#pragma warning restore CS8321 // Local function is declared but never used
+
+static void OnCancelKeyPress(object? sender, ConsoleCancelEventArgs e)
+{
+    Console.WriteLine("OnCancelKeyPress was executed");
+    e.Cancel = true;
+    Environment.Exit(0);
+}
+////   ------------------------- This are just functions representing different stages of the application that I didn't ant to lose -----------------------------------

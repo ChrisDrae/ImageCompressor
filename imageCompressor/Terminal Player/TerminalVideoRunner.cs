@@ -5,7 +5,7 @@ namespace imageCompressor;
 
 public static class TerminalVideoRunner
 {
-    const double fps = 12.5;
+    const double fps = 24;
     const double targetFrameTime = 1000.0 / fps;
 
     public static void RenderTxtToNewTerminal()
@@ -31,6 +31,8 @@ public static class TerminalVideoRunner
         var frameIndex = 1;
         var isRendering = true;
         Console.Write(Ansi.EnableAlternateBuffer);
+        Console.Write(Ansi.DisableMouseTracking);
+        Console.Write(Ansi.HideCursor);
 
         while (isRendering)
         {
