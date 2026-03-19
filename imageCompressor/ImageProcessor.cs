@@ -180,8 +180,13 @@ public class ImageProcessor
             stringBuilder.Append("\r\n");
         }
         var temp = stringBuilder.ToString();
-
+        var watcher = Utility.StartTimer();
         Console.Write(temp);
+        Utility.Logger(
+            watcher,
+            $"Frame {frameIndex}: Context Console.Write: Resolution H:{height} W:{width}"
+        );
+
         stringBuilder.Clear();
         Console.Write("\u001b[H");
     }
