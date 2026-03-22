@@ -1,5 +1,7 @@
 using System.Diagnostics;
 using imageCompressor;
+using NAudio;
+using NAudio.Wave;
 
 namespace imageCompressor;
 
@@ -25,21 +27,49 @@ public static class TerminalVideoRunner
         process.Start();
     }
 
+    public static WaveOutEvent PlayAudio(string path)
+    {
+        Console.Write(path);
+        var audioFile = new AudioFileReader(path);
+        var outputDevice = new WaveOutEvent();
+
+        outputDevice.Init(audioFile);
+        outputDevice.Play();
+
+        return outputDevice;
+    }
+
     public static void RenderFramesToTerminal(string frameDirectory, Boolean isColored)
     {
+        var wasPaused = false;
         var stopwatch = new Stopwatch();
         var frameIndex = 1;
         var isRendering = true;
         Console.Write(Ansi.EnableAlternateBuffer);
         Console.Write(Ansi.DisableMouseTracking);
         Console.Write(Ansi.HideCursor);
+        var audioPlayer = PlayAudio(AppState.AudioFilePath);
 
         while (isRendering)
         {
-            while (AppState.Paused)
+            if (AppState.Paused)
             {
+                if (!wasPaused)
+                {
+                    audioPlayer.Pause();
+                    wasPaused = true;
+                }
+
                 Thread.Sleep(50);
+                continue;
             }
+            else if (wasPaused)
+            {
+                audioPlayer.Play();
+                wasPaused = false;
+            }
+
+            audioPlayer.Play();
             stopwatch.Restart();
             Console.Write("\e[H");
             var framePath = $"{frameDirectory}frame_{frameIndex:D6}.png";
